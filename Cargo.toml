@@ -1,0 +1,19 @@
+[package]
+name = "account-info-integration"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tonic = { version = "*", features = ["tls", "tls-roots", "prost"] }
+my-grpc-extensions = { tag = "0.1.0", git = "https://github.com/MyJetTools/my-grpc-extensions.git" }
+rust-extensions = { tag = "0.1.2", git = "https://github.com/MyJetTools/rust-extensions.git" }
+
+tokio = { version = "*", features = ["full"] }
+tokio-util = "*"
+prost = "*"
+prost-types = "*"
+
+[build-dependencies]
+tonic-build = "*"
