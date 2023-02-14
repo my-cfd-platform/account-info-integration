@@ -1,7 +1,7 @@
 use std::net::SocketAddr;
 use tonic::transport::Server;
 
-use crate::trading_info_integration_grpc::trading_information_grpc_service_server::TradingInformationGrpcServiceServer;
+use crate::account_info_integration_grpc::account_information_grpc_service_server::AccountInformationGrpcServiceServer;
 
 #[derive(Clone)]
 pub struct GrpcService {}
@@ -21,7 +21,7 @@ pub fn start_grpc_server(port: u16) {
 
     tokio::spawn(async move {
         Server::builder()
-            .add_service(TradingInformationGrpcServiceServer::new(service.clone()))
+            .add_service(AccountInformationGrpcServiceServer::new(service.clone()))
             .serve(addr)
             .await
     });

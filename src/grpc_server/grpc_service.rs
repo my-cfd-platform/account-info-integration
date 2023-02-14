@@ -3,8 +3,8 @@ use std::pin::Pin;
 use rust_extensions::date_time::DateTimeAsMicroseconds;
 
 use crate::{
-    trading_info_integration_grpc::{
-        trading_information_grpc_service_server::TradingInformationGrpcService,
+    account_info_integration_grpc::{
+        account_information_grpc_service_server::AccountInformationGrpcService,
         ActiveOrderGrpcModel, ClosedOrderGrpcModel, GetClientInfoGrpcRequest,
         PendingOrderGrpcModel, PingResponse,
     },
@@ -12,7 +12,7 @@ use crate::{
 };
 
 #[tonic::async_trait]
-impl TradingInformationGrpcService for GrpcService {
+impl AccountInformationGrpcService for GrpcService {
     type GetActiveOrdersStream = Pin<
         Box<
             dyn tonic::codegen::futures_core::Stream<
@@ -68,9 +68,8 @@ impl TradingInformationGrpcService for GrpcService {
         &self,
         _: tonic::Request<()>,
     ) -> Result<tonic::Response<PingResponse>, tonic::Status> {
-       
-        return Ok(tonic::Response::new(PingResponse{
-            service_name: "TRADING_INFO_INTEGRATION".to_string(),
+        return Ok(tonic::Response::new(PingResponse {
+            service_name: "ACCOUNT_INFO_INTEGRATION".to_string(),
             date_time: DateTimeAsMicroseconds::now().unix_microseconds as u64,
         }));
     }
