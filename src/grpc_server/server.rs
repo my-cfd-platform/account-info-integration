@@ -1,7 +1,7 @@
 use std::net::SocketAddr;
 use tonic::transport::Server;
 
-use crate::account_info_integration_grpc::account_information_grpc_service_server::AccountInformationGrpcServiceServer;
+use crate::trading_info_integration_grpc::account_information_grpc_service_server::AccountInformationGrpcServiceServer;
 
 #[derive(Clone)]
 pub struct GrpcService {}

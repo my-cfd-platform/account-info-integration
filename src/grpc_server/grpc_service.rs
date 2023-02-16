@@ -3,7 +3,7 @@ use std::pin::Pin;
 use rust_extensions::date_time::DateTimeAsMicroseconds;
 
 use crate::{
-    account_info_integration_grpc::{
+    trading_info_integration_grpc::{
         account_information_grpc_service_server::AccountInformationGrpcService,
         ActiveOrderGrpcModel, ClosedOrderGrpcModel, GetClientInfoGrpcRequest,
         PendingOrderGrpcModel, PingResponse,
