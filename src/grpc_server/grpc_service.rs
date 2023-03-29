@@ -4,7 +4,7 @@ use rust_extensions::date_time::DateTimeAsMicroseconds;
 
 use crate::{
     trading_info_integration_grpc::{
-        account_information_grpc_service_server::AccountInformationGrpcService,
+        trading_info_integration_grpc_server::TradingInfoIntegrationGrpc,
         ActiveOrderGrpcModel, ClosedOrderGrpcModel, GetClientInfoGrpcRequest,
         PendingOrderGrpcModel, PingResponse,
     },
@@ -12,7 +12,7 @@ use crate::{
 };
 
 #[tonic::async_trait]
-impl AccountInformationGrpcService for GrpcService {
+impl TradingInfoIntegrationGrpc for GrpcService {
     type GetActiveOrdersStream = Pin<
         Box<
             dyn tonic::codegen::futures_core::Stream<
