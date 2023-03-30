@@ -4,9 +4,8 @@ use rust_extensions::date_time::DateTimeAsMicroseconds;
 
 use crate::{
     trading_info_integration_grpc::{
-        trading_info_integration_grpc_server::TradingInfoIntegrationGrpc,
-        ActiveOrderGrpcModel, ClosedOrderGrpcModel, GetClientInfoGrpcRequest,
-        PendingOrderGrpcModel, PingResponse,
+        trading_info_integration_grpc_server::TradingInfoIntegrationGrpc, ActiveOrderGrpcModel,
+        ClosedOrderGrpcModel, GetClientInfoGrpcRequest, PendingOrderGrpcModel, PingResponse,
     },
     GrpcService,
 };
@@ -45,9 +44,27 @@ impl TradingInfoIntegrationGrpc for GrpcService {
 
     async fn get_active_orders(
         &self,
-        _: tonic::Request<GetClientInfoGrpcRequest>,
+        request: tonic::Request<GetClientInfoGrpcRequest>,
     ) -> Result<tonic::Response<Self::GetActiveOrdersStream>, tonic::Status> {
-        return my_grpc_extensions::grpc_server::send_vec_to_stream(vec![], |itm| itm).await;
+        let request = request.into_inner();
+        let telemetry = my_telemetry::MyTelemetryContext::new();
+
+        let from = match request.date_from {
+            Some(src) => Some(src.value),
+            None => None,
+        };
+
+        let to = match request.date_to {
+            Some(src) => Some(src.value),
+            None => None,
+        };
+
+        let result = self
+            .app
+            .report_grpc
+            .get_active_positions(&request.account_id, from, to, &telemetry)
+            .await;
+        return my_grpc_extensions::grpc_server::send_vec_to_stream(result, |itm| itm).await;
     }
 
     async fn get_pending_orders(
@@ -59,9 +76,28 @@ impl TradingInfoIntegrationGrpc for GrpcService {
 
     async fn get_history_positions(
         &self,
-        _: tonic::Request<GetClientInfoGrpcRequest>,
+        request: tonic::Request<GetClientInfoGrpcRequest>,
     ) -> Result<tonic::Response<Self::GetHistoryPositionsStream>, tonic::Status> {
-        return my_grpc_extensions::grpc_server::send_vec_to_stream(vec![], |itm| itm).await;
+        let request = request.into_inner();
+        let telemetry = my_telemetry::MyTelemetryContext::new();
+
+        let from = match request.date_from {
+            Some(src) => Some(src.value),
+            None => None,
+        };
+
+        let to = match request.date_to {
+            Some(src) => Some(src.value),
+            None => None,
+        };
+
+        let result = self
+            .app
+            .report_grpc
+            .get_history_positions(&request.account_id, from, to, &telemetry)
+            .await;
+
+        return my_grpc_extensions::grpc_server::send_vec_to_stream(result, |itm| itm).await;
     }
 
     async fn ping(
